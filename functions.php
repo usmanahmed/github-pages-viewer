@@ -1,21 +1,26 @@
 <?php
 
 
-function get_content($url) {
-    global $md;
+function load_skill($url) {
+    include TEMPLATE_PATH . '/skill.php';
+}
 
-    $url = str_replace(SITE_URL, '', $url);
+function load_content($url) {
+    global $md;
+    $html = '<h1>No Content Found</h1>';
+    $url = str_replace(['ajax/', SITE_URL], '', $url);
 
     $md_path = DOCSPATH . $url . '/index.md';
     $md_path = str_replace('+', ' ', $md_path);
-    $html = $md->text( file_get_contents($md_path) );
+
+    if (file_exists($md_path)) $html = $md->text( file_get_contents($md_path) );
 
     return $html;
 }
 
 
 function get_nav($pages, $parent = '') {
-
+// echo '<pre>' . print_r($pages, true) . '</pre>';
     $html = '<ul>';
     foreach ($pages as $key => $value) {
         if ($value == 'index.md' || in_array($value, ['.', '..'])) continue;
@@ -40,7 +45,7 @@ function get_nav($pages, $parent = '') {
 }
 
 
-function scanAllDir(string $path): array
+function scanAllDir(string $path, $start_from = ''): array
 {
 
     $path = str_replace('+', ' ', $path);
