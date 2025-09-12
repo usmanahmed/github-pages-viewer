@@ -1,7 +1,50 @@
 <?php
 
+
+function get_content($url) {
+    global $md;
+
+    $url = str_replace(SITE_URL, '', $url);
+
+    $md_path = DOCSPATH . $url . '/index.md';
+    $md_path = str_replace('+', ' ', $md_path);
+    $html = $md->text( file_get_contents($md_path) );
+
+    return $html;
+}
+
+
+function get_nav($pages, $parent = '') {
+
+    $html = '<ul>';
+    foreach ($pages as $key => $value) {
+        if ($value == 'index.md' || in_array($value, ['.', '..'])) continue;
+
+        $key = is_array($value) ? $key : $value;
+
+        $anchor = explode( '. ', $key);
+        $anchor = end($anchor);
+
+        $key = str_replace( ' ', '+', $key );
+
+        $html .= '<li><a href="' . SITE_URL . '/' .  $parent . (!empty($parent) ? '/' : '') . $key . '">' . $anchor . '</a>';
+
+        if (is_array($value)) {
+            $html .= get_nav($value, $key);
+        }
+        $html .= '</li>';
+    }
+
+    $html .= '</ul>';
+    return $html;
+}
+
+
 function scanAllDir(string $path): array
 {
+
+    $path = str_replace('+', ' ', $path);
+
     $structure = [];
     $iterator = new RecursiveIteratorIterator(
         new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
@@ -34,27 +77,4 @@ function scanAllDir(string $path): array
         }
     }
     return $structure;
-}
-
-function get_nav($pages, $parent = '') {
-    
-    $html = '<ol>';
-    foreach ($pages as $key => $value) {
-        if ($value == 'index.md') continue;
-
-        $anchor = explode( '. ', $key);
-        $anchor = end($anchor);
-
-        $key = str_replace( ' ', '+', $key );
-
-        $html .= '<li><a href="' . SITE_URL . '/' .  $parent . (!empty($parent) ? '/' : '') . $key . '">' . $anchor . '</a>';
-
-        if (is_array($value)) {
-            $html .= get_nav($value, $key);
-        }
-        $html .= '</li>';
-    }
-
-    $html .= '</ol>';
-    return $html;
 }
