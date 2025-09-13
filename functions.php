@@ -32,10 +32,12 @@ function get_nav($pages, $parent = '') {
 
         $key = str_replace( ' ', '+', $key );
 
-        $html .= '<li><a href="' . SITE_URL . '/' .  $parent . (!empty($parent) ? '/' : '') . $key . '">' . $anchor . '</a>';
+        $uri = $parent . (!empty($parent) ? '/' : '') . $key;
+
+        $html .= '<li><a href="' . SITE_URL . '/' . $uri . '">' . $anchor . '</a>';
 
         if (is_array($value)) {
-            $html .= get_nav($value, $key);
+            $html .= get_nav($value, $uri);
         }
         $html .= '</li>';
     }
