@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DevDocs &#8211; Easy to find documentation for Usman</title>
+    <title><?php echo $title; ?></title>
     <meta name='robots' content='noindex, nofollow' />
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/template/assets/style.css" type="text/css" media="all" />
     <link rel="stylesheet" href="<?php echo SITE_URL; ?>/template/assets/prism.css" type="text/css" media="all" />
@@ -19,20 +19,33 @@
 <body class="home page-template-default page page-id-5">
     <div id="container">
         <div id="skill">
-            <?php echo load_skill($_SERVER['REQUEST_URI']); ?>
+            <aside>
+                <div id="branding">
+                    <a href="<?php echo SITE_URL; ?>">Dev Docs</a>
+                </div>
+                <div id="side-list">
+                    <?php echo get_nav(scanAllDir(DOCSPATH)); ?>
+                </div>
+            </aside>
+            <div id="content">
+                <?php echo $content ?>
+            </div>
         </div>
 
     </div>
 
     <script>
         let ajax_links = document.querySelectorAll('#side-list a');
+        let page_title = document.getElementsByTagName('title')[0];
         const contentDiv = document.getElementById('content');
+
 
         for (let ajax_link of ajax_links) {
             ajax_link.addEventListener('click', function(e) {
                 e.preventDefault();
                 let url = this.getAttribute('href');
                 window.history.pushState("object or string", "Title", url);
+
 
                 fetch(url, {
                     method: 'POST',
@@ -45,7 +58,15 @@
                 .then(html => {
                     contentDiv.innerHTML = html;
 
+                    // Execute Prism Syntax Highlighter Library
                     Prism.highlightAll(contentDiv);
+
+                    // Update <title>
+                    const parser = new DOMParser();
+                    html = parser.parseFromString(html, 'text/html');
+                    var heading = html.getElementsByTagName('h1')[0];
+                    page_title.innerText = heading.innerText;
+
                 })
                 .catch(error => {
                     console.error('Error fetching content:', error);

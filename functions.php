@@ -1,10 +1,5 @@
 <?php
 
-
-function load_skill($url) {
-    include TEMPLATE_PATH . '/skill.php';
-}
-
 function load_content($url) {
     global $md;
     $html = '<h1>No Content Found</h1>';

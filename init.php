@@ -12,9 +12,14 @@
 
     file_put_contents(DOCSPATH . '/index.md', generate_nav(scanAllDir(DOCSPATH)));
 
+    $content = load_content(REQUEST);
+    // load title
+    $title = strip_tags( explode('</h1>', $content)[0] );
+
 
     if (isset($_POST['request_type']) && $_POST['request_type'] == 'ajax') {
-        echo load_content(REQUEST);
+        echo $content;
+        exit;
     } else {
         include TEMPLATE_PATH . 'index.php';
     }
