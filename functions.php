@@ -20,7 +20,7 @@ function load_content($url) {
 
 
 function get_nav($pages, $parent = '') {
-// echo '<pre>' . print_r($pages, true) . '</pre>';
+
     $html = '<ul>';
     foreach ($pages as $key => $value) {
         if ($value == 'index.md' || in_array($value, ['.', '..'])) continue;
@@ -44,6 +44,26 @@ function get_nav($pages, $parent = '') {
 
     $html .= '</ul>';
     return $html;
+}
+function generate_nav($pages, $parent = '', $indent = '') {
+    $md = '';
+    foreach ($pages as $key => $value) {
+        if ($value == 'index.md' || in_array($value, ['.', '..'])) continue;
+
+        $uri = $parent . (!empty($parent) ? '/' : '') . $key;
+
+        $anchor = explode( '. ', $key);
+        $anchor = end($anchor);
+
+        $md .= "$indent* [$anchor](" . GITHUB_PAGES . "$uri)" . PHP_EOL;
+
+        if (is_array($value)) {
+            echo 'abc';
+            $md .= generate_nav($value, $uri, $indent . '    ');
+        }
+    }
+
+    return $md;
 }
 
 
