@@ -41,7 +41,7 @@ function get_nav($pages, $parent = '') {
     return $html;
 }
 function generate_nav($pages, $parent = '', $indent = '') {
-    $md = '';
+    $md = empty($parent) ? "# Docs" . PHP_EOL : '';
     foreach ($pages as $key => $value) {
         if ($value == 'index.md' || in_array($value, ['.', '..'])) continue;
 
