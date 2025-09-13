@@ -58,7 +58,6 @@ function generate_nav($pages, $parent = '', $indent = '') {
         $md .= "$indent* [$anchor](" . GITHUB_PAGES . "$uri)" . PHP_EOL;
 
         if (is_array($value)) {
-            echo 'abc';
             $md .= generate_nav($value, $uri, $indent . '    ');
         }
     }
