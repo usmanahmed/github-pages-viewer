@@ -16,7 +16,7 @@
 
 </head>
 
-<body class="home page-template-default page page-id-5">
+<body>
     <div id="container">
         <div id="skill">
             <aside>

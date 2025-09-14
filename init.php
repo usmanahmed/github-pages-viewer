@@ -20,6 +20,8 @@
     if (isset($_POST['request_type']) && $_POST['request_type'] == 'ajax') {
         echo $content;
         exit;
+    } elseif(REQUEST == '/') {
+        include TEMPLATE_PATH . 'home.php';
     } else {
         include TEMPLATE_PATH . 'index.php';
     }
