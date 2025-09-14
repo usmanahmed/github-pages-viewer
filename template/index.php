@@ -35,6 +35,31 @@
     </div>
 
     <script>
+
+        // Generate #links for <h2>
+        function generate_hash_links() {
+            let content_container = document.getElementById('content');
+            const h2s = document.querySelectorAll('#content h2');
+            let h2_text;
+            let links_list = '<div id="jump-links"><ol class="page-toc">';
+            
+            for (let h2 of h2s) {
+                h2_text = h2.innerText;
+                h2_text = h2_text.replace(/[^a-zA-Z0-9_]/g, '-');
+
+                h2.setAttribute('id', h2_text);
+                
+                links_list += '<li><a href="#' + h2_text + '">' + h2.innerText + '</a></li>';
+                
+                
+            }
+            links_list += '</ol></div>';
+
+            content_container.innerHTML += links_list;
+        }
+        generate_hash_links();
+
+        // Ajax on click on sidebar links
         let ajax_links = document.querySelectorAll('#side-list a');
         let page_title = document.getElementsByTagName('title')[0];
         const contentDiv = document.getElementById('content');
@@ -57,6 +82,8 @@
                 .then(response => response.text())
                 .then(html => {
                     contentDiv.innerHTML = html;
+
+                    generate_hash_links();
 
                     // Execute Prism Syntax Highlighter Library
                     Prism.highlightAll(contentDiv);
